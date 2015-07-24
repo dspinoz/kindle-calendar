@@ -9,7 +9,7 @@ var app     = express();
 // configuration =======================================================
   
 var config = require('./config/kindle-calendar');
-
+var routes = require('./app/kindle-calendar');
 
 app.configure(function() {
   
@@ -20,6 +20,8 @@ app.configure(function() {
   //app.use(express.logger('dev')); 				// log only non-public content
   //app.use(express.errorHandler());
 });
+
+routes(app);
 
 console.log("Starting kindle-calendar");
 exports = module.exports = app; 						   // expose app
