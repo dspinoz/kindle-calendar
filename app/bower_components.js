@@ -29,4 +29,8 @@ module.exports = function(app) {
   app.get('/fonts/glyphicons-halflings-regular.woff', function(req,res) {
     res.sendfile('bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff');
   });
+
+  app.get('/d3.js', function(req, res) {
+    res.sendfile('bower_components/d3/d3.js')
+  });
 };
