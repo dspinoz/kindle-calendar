@@ -17,7 +17,7 @@ module.exports = function(app) {
   });
   
   app.get('/index', function(req,res) {
-	res.send('index');
+	res.render('index', kindle_calendar.get(req));
   });
   
   app.get('/new', function(req,res) {

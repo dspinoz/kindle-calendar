@@ -1,0 +1,18 @@
+//- default container
+doctype html
+html(lang='en')
+
+  head
+  
+    include head
+
+  body
+    
+    include nav
+
+    .container(style='font: 12px sans-serif;')
+      .row
+        .span12
+          #main-content.container
+            block container
+              p hello world

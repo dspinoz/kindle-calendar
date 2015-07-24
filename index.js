@@ -17,8 +17,14 @@ app.configure(function() {
   app.use(express.logger('dev')); // log every request to the console
   
   app.use(express.static(__dirname + '/public')); 	// set the static files location
-  //app.use(express.logger('dev')); 				// log only non-public content
+  //app.use(express.logger('dev')); 				  // log only non-public content
   //app.use(express.errorHandler());
+  
+  //pretty print templated resources
+  app.locals.pretty = true;
+  
+  app.set('view engine', 'jade');
+  app.set('views', __dirname + '/views');
 });
 
 routes(app);
