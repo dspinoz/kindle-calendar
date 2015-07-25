@@ -5,6 +5,11 @@ module.exports = function(app) {
 
   // REST API v1.0 ===========================================
   
+  app.get(root + '/time', function(req, res) {
+    res.set('Content-Type', 'application/json');
+    res.send(JSON.stringify({time: new Date().getTime() }));
+  });
+  
   app.get(root + '/hello', function(req,res) {
     res.send('HELLO WORLD');
   });
