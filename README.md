@@ -13,4 +13,10 @@ npm install -g bower
 bower install
 ```
 
+## Running
 
+To run the web app
+
+```bash
+./index.js
+```
