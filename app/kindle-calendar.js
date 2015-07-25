@@ -9,19 +9,21 @@ module.exports = function(app) {
   bower_resources(app);
   apiv1(app);
 
+  // configure templates
+  app.locals.title = 'Kindle Calendar';
+  app.locals.pages = [
+    {href: '/aaa', title: 'Aaa'}   
+  ];
+
   // pages =============================================================
   // for client-side rendering
 
   app.get('/', function(req,res) {
-	res.send('root');
+	res.render('index', req);
   });
   
-  app.get('/index', function(req,res) {
-	res.render('index', kindle_calendar.get(req));
-  });
-  
-  app.get('/new', function(req,res) {
-	res.send('new');
+  app.get('/index.html', function(req,res) {
+	res.render('index', req);
   });
   
 };

@@ -31,6 +31,6 @@ module.exports = function(app) {
   });
 
   app.get('/d3.js', function(req, res) {
-    res.sendfile('bower_components/d3/d3.js')
+    res.sendfile('bower_components/d3/d3.js');
   });
 };

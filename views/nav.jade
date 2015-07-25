@@ -14,6 +14,6 @@
       ul.nav.navbar-nav
         each p in pages
             //- highlight current page
-            li(class= p.href == current ? "active" : "")  
+            li(class= p.href == path ? "active" : "")  
               a(href=p.href)
                 =p.title
