@@ -1,23 +1,5 @@
 extends container
-block append head
-  script(type='text/javascript', src='/js/index.js')
-
 block container
 
   h1 Getting Started
-  
-  button.btn.btn-default.btn-lg(type="button", onclick="updateData()")
-    span.glyphicon.glyphicon-refresh
-    |  Refresh
-    
-  script(type='text/javascript').
 
-    d3.select('#main-content')
-    .append('div')
-    .attr('id', 'd3')
-    .html('<span class="glyphicon glyphicon-ok" style="color:green">d3</span>');
-
-
-block append body-end
-  script(type='text/javascript').
-    console.log('lll');
