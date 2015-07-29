@@ -1,11 +1,5 @@
-.daynum {
-  font-size: 200px;
-}
-
-.month {
-  font-size: 50px;
-}
-
-.day {
-  font-size: 25px;
+.view {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }

@@ -11,23 +11,26 @@ module.exports = function(app) {
 
   // configure templates
   app.locals.title = 'Kindle Calendar';
-  app.locals.pages = [
-    {href: '/test', title: 'Testing'}   
+  app.locals.pages = [ 
   ];
 
   // pages =============================================================
   // for client-side rendering
 
   app.get('/', function(req,res) {
-	res.render('test', req);
+	res.render('kindle', req);
   });
   
   app.get('/index.html', function(req,res) {
-	res.render('index', req);
+	res.render('kindle', req);
   });
   
   app.get('/test', function(req,res) {
 	res.render('test', req);
+  });
+  
+  app.get('/d3kit-eg1', function(req,res) {
+	res.render('d3kit-eg1', req);
   });
   
 };
