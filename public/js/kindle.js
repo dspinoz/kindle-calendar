@@ -1,233 +1,140 @@
-/*
-var time_div = d3.select('#time');
 
-function update() {
-  
-  d3.json('/api/v1/time', function(err,json) {
+var ymdFormat = d3.time.format('%Y-%m-%d'),
+    dFormat = d3.time.format('%e'),
+    tFormat = d3.time.format('%H:%M'),
+    monthFormat = d3.time.format('%b'),
+    dNameFormat = d3.time.format('%a'),
+    dNumFormat = d3.time.format('%w');
+
+var chart = new d3Kit.Skeleton('.view')
+  .autoResize('both')
+  .on('resize', function() {
+    var width = chart.getInnerWidth();
+    var height = chart.getInnerHeight();
+
+    chart.getRootG().attr('transform', 'scale('+width/13/3+')');
+
+//    d3.select('#params').text('new width ' + width/12 +  ' height ' + height);
+  })
+  .on('data', function(date) {
     
-    var d = new Date(json.time);
-    
-    var hrmin = d3.time.format('%I:%M');
-    var day = d3.time.format('%A');
-    var month = d3.time.format('%B');
-    var daynum = d3.time.format('%e');
-    
-    time_div.html(function() {
-      return '<span class="h1 daynum">' + hrmin(d) + '</span>' +
-             '<br/>' +
-              '<span class="h1 daynum">' + daynum(d) + '</span>' + '&nbsp;' +
-             '<span class="h3 month">' + month(d) + '</span>' +
-             '</br>' +
-             '<span class="h5 day">' + day(d) + '</span>';
-    });
+    layers.get('month.date').select('text').text(dNameFormat(date) +' '+ dFormat(date) +' ' +monthFormat(date));
+    layers.get('time').select('text').text(tFormat(date));
     
   });
-}
-
-setInterval(update, 10000);
-update();
-*/
-
-/*
-var MIN_RADIUS = 20;
-var MAX_RADIUS = 50;
-
-var DEFAULT_OPTIONS = {
-  margin: {top: MAX_RADIUS, right: MAX_RADIUS, bottom: MAX_RADIUS, left: MAX_RADIUS}
-};
-
-var xScale = d3.scale.linear();
-var yScale = d3.scale.linear();
-var radiusScale = d3.scale.linear()
-  .range([MIN_RADIUS, MAX_RADIUS]);
-var colorScale = d3.scale.category20();
-
-var data = d3.range(20).map(function(i) {
-  return {size: i, x: Math.random(), y: Math.random()};
-});
-
-// create and configure the charlets
-
-var circles = CircleChartlet()
-  .property('radius', function(d, i) {return radiusScale(d.size);})
-  .property('color', function(d, i) {return d.customColor || colorScale(i);})
-  .on('circleClicked', onClicked);
   
-var rects = RectChartlet()
-  .property('width', function(d, i) {return radiusScale(d.size);})
-  .property('height', function(d, i) {return radiusScale(d.size);})
-  .property('color', function(d, i) {return d.customColor || colorScale(i);})
-  .on('rectClicked', onClicked);
-
-// create chart
-
-var chart = new d3Kit.Skeleton('.view', DEFAULT_OPTIONS)
-  .autoResize('both')
-  .on('resize', onResize)
-  .on('data', onData);
-
-chart.resizeToFitContainer();
-chart.data(data);
-
-// cope with data change
-
-function onData(data) {
-
-  if (chart.hasData()) {
-
-    radiusScale.domain(d3.extent(data, function(d) {return d.size;}));
-
-    var nodes = chart.getRootG().selectAll('g.node')
-      .data(data);
-
-    nodes.enter()
-      .append('g')
-      .classed('node', true)
-      .call(circles.enter);
-
-    nodes.exit()
-      .call(circles.exit);
-
-    onResize();
-  }
-}
-
-// handle resize
-
-function onResize() {
-  xScale.range([0, chart.getInnerWidth ()]);
-  yScale.range([0, chart.getInnerHeight()]);
-
-  chart.getRootG().selectAll('.node')
-    .attr('transform', function(d) {return 'translate(' + [xScale(d.x), yScale(d.y)] + ')';})
-    .call(circles.update);
-}
-
-// toggle circles back when clicked
-
-function onClicked(d) {
-  d.customColor = d.customColor ? null : 'black';
-  chart.getRootG().selectAll('.node').call(circles.update);
-}
-
-// circle chartlet constructor
-
-function CircleChartlet() {
-
-  var events = ['circleClicked'];
-
-  var chartlet = d3Kit.Chartlet(enter, update, exit, events);
-
-  function enter(selection, done) {
-    selection
-      .append('circle')
-      .attr('r', 0)
-      .attr('fill', 'white')
-      .on('click', chartlet.getDispatcher().circleClicked);
-
-    done(selection);
-  }
-
-  function update(selection, done) {
-    selection.select('circle')
-      .transition()
-      .attr('fill', chartlet.property('color'))
-      .attr('r', chartlet.property('radius'))
-      .each('end', done);
-  }
-
-  function exit(selection, done) {
-    selection.select('circle')
-      .transition()
-      .attr('r', 0)
-      .remove()
-      .each('end', done);
-  }
-
-  return chartlet;
-};
-
-// rect chartlet constructor
-
-function RectChartlet() {
-
-  var events = ['rectClicked'];
-
-  var chartlet = d3Kit.Chartlet(enter, update, exit, events);
-
-  function enter(selection, done) {
-    selection
-      .append('rect')
-      .attr('width', 0)
-      .attr('height', 0)
-      .attr('fill', 'white')
-      .on('click', chartlet.getDispatcher().rectClicked);
-
-    done(selection);
-  }
-
-  function update(selection, done) {
-    selection.select('rect')
-      .transition()
-      .attr('fill', chartlet.property('color'))
-      .attr('width', chartlet.property('width'))
-      .attr('height', chartlet.property('height'))
-      .each('end', done);
-  }
-
-  function exit(selection, done) {
-    selection.select('rect')
-      .transition()
-      .attr('width', 0)
-      .attr('height', 0)
-      .remove()
-      .each('end', done);
-  }
-
-  return chartlet;
-};
-*/
-
-var DEFAULT_OPTIONS = {
-  margin: {top: 0, right: 0, bottom: 0, left: 0}
-};
-
-var chart = new d3Kit.Skeleton('.view', DEFAULT_OPTIONS)
-  .autoResize('both');
-
-var root = chart.getRootG();
-  
-var calendar = root.append('g')
-  .attr('transform', 'translate(0, 240) scale(20)');
-  
-calendar
-  .append("text")
-    .attr("font-family","FontAwesome")
-    .text('\uf133'); 
-    
-calendar
-  .append('text')
-  .attr('transform', 'translate(1,0.5)')
-  .attr('font-size', '10px')
-  .text('25');
-  
-calendar
-  .append('text')
-  .attr('transform', 'translate(15,-9)')
-  .attr('font-size', '2px')
-  .text('July');
-  
-calendar
-  .append('text')
-  .attr('transform', 'translate(20,-5)')
-  .attr('font-size', '2px')
+var layers = chart.getLayerOrganizer();
+layers.create([{'month': ['icon', 'date']}, 'day', 'cal', 'time']);
+  /*
+// setup the svg
+layers.get('month.icon').append("text")
+  .attr('y', 12)
+  .attr("font-family","FontAwesome")
+  .text('\uf133');  //calendar
+ */ 
+layers.get('month.date').append('text')
+  .attr('x', 24)
+  .attr('y', 8)
+  .attr('font-size', '9px')
   .attr('text-anchor', 'middle')
-  .text('Saturday');
+  .attr('font-weight', 'bold')
+  .text('');
 
-chart.on('resize', function() {
-  var width = chart.getInnerWidth();
-  var height = chart.getInnerHeight();
+layers.get('time').append('text')
+  .attr('x', 16)
+  .attr('y', 20.5)
+  .attr('font-size', '9px')
+  .attr('text-anchor', 'middle')
+  .text('');
 
-  console.log('new width', width, 'height', height);
-});
+var today = ymdFormat.parse('2015-02-25');
 
+var cg = layers.get('cal')
+  .attr('transform', ' translate(32,12)')
+  .selectAll('g')
+  .data(function() {
+    var start = d3.time.sunday.floor(today);
+    
+    while (today.getMonth() == start.getMonth() && 
+           start.getDate() != 0) {
+      start = d3.time.sunday.floor(new Date(start.getTime() - (24*60*60*1000)));
+    }
+    
+    var end = d3.time.sunday.ceil(new Date(today.getFullYear(), today.getMonth()+1, 0));
+    
+    var days = d3.time.days(start, end);
+
+    while (days.length < 42) {
+      end = d3.time.sunday.ceil(new Date(end.getTime() + (24*60*60*1000)));
+      days = d3.time.days(start, end);
+    }
+    
+    return [days.slice(0, 7),
+        days.slice(7, 14),
+        days.slice(14, 21),
+        days.slice(21, 28),
+        days.slice(28, 35),
+        days.slice(35, 42)];
+  }).enter()
+  .append('g')
+    .attr('transform', function(d,i) {
+      return 'translate(0, ' + i *2.2 + ')';
+    });
+
+var c = cg.selectAll('circle.cal')
+  .data(function(d) { return d; })
+  .enter()
+  .append('circle')
+    .classed('cal', true)
+    .classed('current', function(d) {
+      if (ymdFormat(today) == ymdFormat(d)) {
+        return true;
+      }
+      return false;
+    })
+    .classed('in-month', function(d) {
+      if (monthFormat(today) == monthFormat(d)) {
+        return true;
+      }
+      return false;
+    })
+    .attr('cx', function(d,i) { return i*2.2; })
+    .attr('cy', 0)
+    .attr('r', 1)
+    .on('mouseover', function(d) {
+      console.log(d);
+      d3.select('#circle-data').text(JSON.stringify(d));
+    });
+
+cg.selectAll('text.cal')
+  .data(function(d) { return d; })
+  .enter()
+  .append('text')
+    .classed('cal', true)
+    .classed('current', function(d) {
+      if (ymdFormat(today) == ymdFormat(d)) {
+        return true;
+      }
+      return false;
+    })
+    .classed('in-month', function(d) {
+      if (monthFormat(today) == monthFormat(d)) {
+        return true;
+      }
+      return false;
+    })
+    .attr('x', function(d,i) { return i*2.2; })
+    .attr('y', 0.4)
+    .attr('font-size', '1px')
+    .attr('text-anchor', 'middle')
+    .text(function(d) {
+      return dFormat(d);
+    });
+
+  
+chart.data(today);
+
+var i = 1;
+setInterval(function() {
+  chart.data(new Date(today.getTime()+(i++*6*60*1000)));
+}, 200);

@@ -3,3 +3,30 @@
   width: 100%;
   height: 100%;
 }
+
+#circle-data {
+  text-align: right;
+}
+
+circle.cal.in-month {
+  fill: #fff;
+}
+
+circle.cal.current {
+  fill: #000;
+}
+
+circle.cal {
+  fill: #fff;
+}
+
+text.cal.in-month {
+  fill: #000;
+}
+text.cal.current {
+  fill: #fff;
+}
+
+text.cal {
+  fill: #ccc;
+}
