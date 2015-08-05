@@ -1,13 +1,33 @@
-.view {
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 30px;
+}
+
+.footer {
   position: absolute;
+  bottom: 0;
   width: 100%;
-  height: 100%;
+  /* Set the fixed height of the footer here */
+  height: 30px;
+  background-color: #f5f5f5;
 }
 
-#circle-data {
-  text-align: right;
+.container {
+  width: auto;
+  max-width: 680px;
+  padding: 0 15px;
+}
+.container .text-muted {
+  margin: 5px 0;
 }
 
+/* month-view */
 circle.cal.in-month {
   fill: #fff;
 }

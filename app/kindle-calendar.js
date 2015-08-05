@@ -25,6 +25,10 @@ module.exports = function(app) {
 	res.render('kindle', req);
   });
   
+  app.get('/index2.html', function(req,res) {
+	res.render('kindle2', req);
+  });
+  
   app.get('/test', function(req,res) {
 	res.render('test', req);
   });

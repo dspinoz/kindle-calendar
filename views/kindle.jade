@@ -1,25 +1,41 @@
-//- default container
 doctype html
 html(lang='en')
-
   head
-    meta(charset='utf-8')
-    meta(name="viewport",content="width=device-width,initial-scale=1")
-    title!= title
-    block head
-      script(type='text/javascript', src='/jquery.js')
-      script(type='text/javascript', src='/bootstrap.js')
-      link(type='text/css', rel='stylesheet', href='/bootstrap.css')
-      script(type='text/javascript', src='/d3.js')
-      script(type='text/javascript', src='/d3kit.js')
-      link(type='text/css', rel='stylesheet', href='/font-awesome.css')
-      link(type='text/css', rel='stylesheet', href='/css/kindle.css')
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    //- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags 
+    meta(name="description" content="")
+    meta(name="author" content="")
+    link(rel="icon" href="../../favicon.ico")
 
+    title Sticky Footer Template for Bootstrap
+
+    //- Bootstrap core CSS
+    link(type='text/css', rel='stylesheet', href='/bootstrap.css')
+    
+    //- d3
+    script(type='text/javascript', src='/d3.js')
+    script(type='text/javascript', src='/d3kit.js')
+    
+    //- fonts/icons
+    link(type='text/css', rel='stylesheet', href='/font-awesome.css')
+
+    //- my style
+    link(type='text/css', rel='stylesheet', href='/css/kindle.css')
+      
   body
-    
-    .view
-    //- pre#params
-    //- pre#circle-data
-    
+
+    //- Begin page content
+    .container-fluid
+      .page-header
+        h1#date
+        h3#time
+      
+      p#month-view
+
+    footer.footer
+      .container
+        p.text-muted#footer
         
     script(type='text/javascript', src='/js/kindle.js')
