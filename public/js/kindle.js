@@ -16,6 +16,11 @@ var chart = new d3Kit.Skeleton('#month-view', {
   
 var redraw = function(date) {
 
+  if (Object.prototype.toString.call( date ) !== '[object Date]') {
+    // not a date - chart size (from resize)
+    return;
+  }
+  
   if (!chart.hasData()) {
     return;
   }
