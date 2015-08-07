@@ -28,12 +28,20 @@ html(lang='en')
 
     //- Begin page content
     .container-fluid
-      .page-header
-        h1#date
-        h3#time
+      .row
+        .col-xs-6 
+          h1#time(style='font-size: +7em')
+        .col-xs-6
+          h1#date
+          h1(style='margin-top:0')
+            #year
+            small
+              #day
+          
       
-      .col-xs-6 hello
-      #month-view.col-xs-6(style='padding: 0 0 0 0')
+      .row
+        .col-xs-6 hello
+        #month-view.col-xs-6(style='padding: 0 0 0 0')
 
     footer.footer
       .container

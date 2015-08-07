@@ -4,7 +4,8 @@ var ymdFormat = d3.time.format('%Y-%m-%d'),
     timeFormat = d3.time.format('%H:%M'),
     monthFormat = d3.time.format('%B'),
     dayNumFormat = d3.time.format('%e'),
-    dayNameFormat = d3.time.format('%A');
+    dayNameFormat = d3.time.format('%A'),
+    yearFormat = d3.time.format('%Y');
 
 var today = ymdFormat.parse('2015-01-09');
 
@@ -131,7 +132,9 @@ setInterval(function() {
   
   var date = new Date(today.getTime()+((count+=50)*6*60*1000));
   
-  d3.select('#date').html(dayNumFormat(date) +' ' +monthFormat(date) + ' <small>'+dayNameFormat(date)+'</small>');
+  d3.select('#date').text(dayNumFormat(date) +' ' +monthFormat(date))
+  d3.select('#year').text(yearFormat(date))
+  d3.select('#day').text(dayNameFormat(date));
   d3.select('#time').text(timeFormat(date));
   
   chart.data(date);
