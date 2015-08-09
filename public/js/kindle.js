@@ -12,7 +12,7 @@ var today = ymdFormat.parse('2015-01-09');
 var chart = new d3Kit.Skeleton('#month-view', {
     margin: {top: 0, right: 0, bottom: 0, left: 0}
   })
-  .autoResize('both')
+  .autoResize('width')
   .autoResizeToAspectRatio(1);
   
 var redraw = function(date) {
