@@ -126,6 +126,53 @@ var redraw = function(date) {
 chart
   .on('resize', redraw)
   .on('data', redraw);
+  
+  
+  
+var time = new d3Kit.Skeleton('#time', {
+    margin: {top: 0, right: 0, bottom: 0, left: 0}
+  })
+  .autoResize('width')
+  .autoResizeToAspectRatio(1);
+  
+var redrawTime = function(date) {
+  
+  if (Object.prototype.toString.call( date ) !== '[object Date]') {
+    // not a date - chart size (from resize)
+    return;
+  }
+  
+  if (!time.hasData()) {
+    return;
+  }
+  
+  var txt = time.getRootG()
+    .selectAll('text')
+    .data([date]);
+  
+  txt.exit().remove();
+  
+  txt.enter()
+    .append('text');
+    
+  txt.text(timeFormat(date));
+    
+    
+  var div = d3.select('#time').node().getBoundingClientRect();
+  var svg = txt.node().getBBox();
+
+  var pt = 1;
+  while(svg.height < div.height &&
+        svg.width < div.width) {
+    txt.style('font-size', pt++)
+       .attr('y', pt);
+    svg = txt.node().getBBox(); 
+  }
+};
+
+time.on('resize', redrawTime)
+    .on('data', redrawTime);
+  
 
 var count = 1;
 setInterval(function() {
@@ -135,8 +182,8 @@ setInterval(function() {
   d3.select('#date').text(dayNumFormat(date) +' ' +monthFormat(date))
   d3.select('#year').text(yearFormat(date))
   d3.select('#day').text(dayNameFormat(date));
-  d3.select('#time').text(timeFormat(date));
   
+  time.data(date);
   chart.data(date);
   
   d3.select('#footer').html('<span class="fa fa-refresh"></span> Last refreshed at ' + d3.time.format.iso(new Date()));
