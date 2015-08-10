@@ -127,14 +127,20 @@ chart
   .on('resize', redraw)
   .on('data', redraw);
   
-  
-  
-var time = new d3Kit.Skeleton('#time', {
+
+
+
+var textSvg = d3Kit.factory.createChart(
+  {
     margin: {top: 0, right: 0, bottom: 0, left: 0}
-  })
-  .autoResize('width')
-  .autoResizeToAspectRatio(1);
-  
+  }, 
+  ['text'],
+  function(chart) {
+    chart.mixin({
+      'text': function(d) {
+        return d;
+      }
+    });
 var redrawTime = function(date) {
   
   if (Object.prototype.toString.call( date ) !== '[object Date]') {
@@ -145,20 +151,24 @@ var redrawTime = function(date) {
   if (!time.hasData()) {
     return;
   }
+
+  var dispatch = chart.getDispatcher();
   
-  var txt = time.getRootG()
+  var txt = chart.getRootG()
     .selectAll('text')
     .data([date]);
   
   txt.exit().remove();
   
   txt.enter()
-    .append('text');
+    .append('text')
+      .style('font-size', 1)
     
-  txt.text(timeFormat(date));
+  txt.text(chart.text);
     
     
-  var div = d3.select('#time').node().getBoundingClientRect();
+  //var div = d3.select('#time').node().getBoundingClientRect();
+  var div = {width: chart.getInnerWidth(), height: chart.getInnerHeight()};;
   var svg = txt.node().getBBox();
 
   var pt = 1;
@@ -170,20 +180,50 @@ var redrawTime = function(date) {
   }
 };
 
-time.on('resize', redrawTime)
-    .on('data', redrawTime);
+    
   
+    chart
+      //.autoResize('both')
+      .autoResize('width')
+      .autoResizeToAspectRatio(1)
+      .on('resize', redrawTime)
+      .on('data', redrawTime);
+  });
+
+
+var time = new textSvg('#time').mixin({
+  'text': function(d) {return timeFormat(d);}
+});
+
+var year = new textSvg('#year').mixin({
+  'text': function(d) {return yearFormat(d);}
+});
+
+var day = new textSvg('#day').mixin({
+  'text': function(d) {return dayNameFormat(d);}
+});
+
+var dateLong = new textSvg('#date').mixin({
+  'text': function(d) {
+    console.log('date text',
+      d3.select(this).node().getBBox().width
+    );
+    return dayNumFormat(d)+' '+monthFormat(d);}
+});
 
 var count = 1;
 setInterval(function() {
   
   var date = new Date(today.getTime()+((count+=50)*6*60*1000));
   
-  d3.select('#date').text(dayNumFormat(date) +' ' +monthFormat(date))
-  d3.select('#year').text(yearFormat(date))
-  d3.select('#day').text(dayNameFormat(date));
+  //d3.select('#date').text(dayNumFormat(date) +' ' +monthFormat(date))
+  //d3.select('#year').text(yearFormat(date))
+  //d3.select('#day').text(dayNameFormat(date));
   
   time.data(date);
+  year.data(date);
+  day.data(date);
+  dateLong.data(date);
   chart.data(date);
   
   d3.select('#footer').html('<span class="fa fa-refresh"></span> Last refreshed at ' + d3.time.format.iso(new Date()));
