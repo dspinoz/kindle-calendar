@@ -1,7 +1,7 @@
 
 
 var ymdFormat = d3.time.format('%Y-%m-%d'),
-    timeFormat = d3.time.format('%H:%M'),
+    timeFormat = d3.time.format('%-I:%M %p'),
     monthFormat = d3.time.format('%B'),
     dayNumFormat = d3.time.format('%e'),
     dayNameFormat = d3.time.format('%A'),
