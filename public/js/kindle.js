@@ -132,62 +132,94 @@ chart
 
 var textSvg = d3Kit.factory.createChart(
   {
-    margin: {top: 0, right: 0, bottom: 0, left: 0}
+    margin: {top: 0, right: 0, bottom: 0, left: 0},
+    initialWidth: 0,
+    initialHeight: 0
   }, 
-  ['text'],
-  function(chart) {
-    chart.mixin({
+  [],
+  function(skel) {
+  
+    var pt = 1;
+  
+    skel.mixin({
       'text': function(d) {
         return d;
       }
     });
-var redrawTime = function(date) {
-  
-  if (Object.prototype.toString.call( date ) !== '[object Date]') {
-    // not a date - chart size (from resize)
-    return;
-  }
-  
-  if (!time.hasData()) {
-    return;
-  }
+    
+    var resize = function(dim) {
+      redraw(skel.data());
+    };
+    
+    var redraw = function() {
+      var data = skel.data();
+      
+      if (Object.prototype.toString.call( data ) !== '[object Date]') {
+        // not a date - chart size (from resize)
+        return;
+      }
+      
+      if (!skel.hasData()) {
+        return;
+      }
 
-  var dispatch = chart.getDispatcher();
-  
-  var txt = chart.getRootG()
-    .selectAll('text')
-    .data([date]);
-  
-  txt.exit().remove();
-  
-  txt.enter()
-    .append('text')
-      .style('font-size', 1)
-    
-  txt.text(chart.text);
-    
-    
-  //var div = d3.select('#time').node().getBoundingClientRect();
-  var div = {width: chart.getInnerWidth(), height: chart.getInnerHeight()};;
-  var svg = txt.node().getBBox();
+      var dispatch = skel.getDispatcher();
+      
+      var txt = skel.getRootG()
+        .selectAll('text')
+        .data([data]);
+      
+      txt.exit().remove();
+      
+      txt.enter()
+        .append('text')
+          .style('font-size', pt);
+        
+      txt.text(skel.text);
+        
+        
+      //var div = d3.select('#time').node().getBoundingClientRect();
+      var div = {width: skel.getInnerWidth(), height: skel.getInnerHeight()};
+      var svg = txt.node().getBBox();
 
-  var pt = 1;
-  while(svg.height < div.height &&
-        svg.width < div.width) {
-    txt.style('font-size', pt++)
-       .attr('y', pt);
-    svg = txt.node().getBBox(); 
-  }
-};
+      // see how big the text can grow
+      var checkedMax = false;
+      while(svg.width < div.width) {
+        checkedMax = true;
+        txt.style('font-size', pt++)
+           .attr('y', pt-(pt*.25)); // take some for hanging chars
+        svg = txt.node().getBBox(); 
+      }
+      
+      // found the max
+      if (checkedMax) {
+        pt--;
+      }
+      
+      // text is too big, make it fit
+      var checkedMin = false;
+      while(svg.width > div.width) {
+        checkedMin = true;
+        txt.style('font-size', pt--)
+           .attr('y', pt-(pt*.25)); // take some for hanging chars
+        svg = txt.node().getBBox(); 
+      }
+      
+      // found the min
+      if (checkedMin) {
+        pt++;
+      }
+      
+      skel.height(svg.height, true);
+      
+      txt.style('font-size', pt)
+         .attr('y', pt-(pt*.25)); // take some for hanging chars
+    };
 
-    
-  
-    chart
-      //.autoResize('both')
-      .autoResize('width')
-      .autoResizeToAspectRatio(1)
-      .on('resize', redrawTime)
-      .on('data', redrawTime);
+    skel
+      .autoResize('both')
+      .on('resize', resize)
+      .on('data', redraw);
   });
 
 
@@ -205,9 +237,6 @@ var day = new textSvg('#day').mixin({
 
 var dateLong = new textSvg('#date').mixin({
   'text': function(d) {
-    console.log('date text',
-      d3.select(this).node().getBBox().width
-    );
     return dayNumFormat(d)+' '+monthFormat(d);}
 });
 
@@ -224,6 +253,7 @@ setInterval(function() {
   year.data(date);
   day.data(date);
   dateLong.data(date);
+  
   chart.data(date);
   
   d3.select('#footer').html('<span class="fa fa-refresh"></span> Last refreshed at ' + d3.time.format.iso(new Date()));
