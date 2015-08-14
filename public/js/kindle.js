@@ -256,35 +256,82 @@ updateDate();
 setInterval(updateDate, 60000);
 
 
-d3.xml('/api/v1/weather', "application/xml", function(err, xml) {
+d3.json('/api/v1/weather', function(err, json) {
 
-  console.log('weather', err,xml);
-  var rss = xml.getElementsByTagName('rss');
-  var channel = rss[0].getElementsByTagName('channel');
-  var items = channel[0].getElementsByTagName('item');
+  console.log('weather', err,json);
 
-  var data = [];
-  for(var i = 0; i < items.length; i++) {
-    data.push(items[i]);
-  }
+  d3.select('#weather').append('h3').text(json.name);
   
-  var p = d3.select('#weather').selectAll('p')
-    .data(data.filter(function(d) {
-      var str = d.getElementsByTagName('title')[0].childNodes[0].nodeValue;
-      if (str.toLowerCase().indexOf('current weather') == -1 &&
-          str.toLowerCase().indexOf('weather forecast') == -1) {
-        return false;
-      }
-      return true;
-    }));
+  var ico = d3.select('#weather').append('div').selectAll('div').data(json.weather);
+  
+  ico.exit().remove();
+  
+  ico.enter().append('div')
+  
+  ico.html(function(d) {
+    //http://openweathermap.org/weather-conditions
+    var wi = '';
+    
+    var type = +d.icon.slice(0,2);
+    var time = '';
+    
+    if (d.icon.slice(2,3) == 'd') {
+      time = 'day';
+    }
+    else if (d.icon.slice(2,3) == 'n') {
+      time = 'night';
+    }
+    
+    switch(type) {
+      case 01:
+        if (time == 'day')
+          wi = 'sunny';
+        else
+          wi = 'clear';
+        break;
+      case 02:
+        wi = 'cloudy';
+        break;
+      case 03:
+      case 04:
+        wi = 'cloudy';
+        time = '';
+        break;
+      case 09:
+        wi = 'showers';
+        break;
+      case 10:
+        wi = 'rain';
+        break;
+      case 11:
+        wi = 'thunderstorm';
+        break;
+      case 13:
+        wi = 'snow';
+        break;
+      case 50:
+        wi = 'fog';
+        break;
+      default:
+        wi = 'alien';
+    }
+    
+    return '<h2><span class="wi wi'+(time.length > 0 ? '-'+time : '')+'-'+wi+'"></span>'+ json.main.temp +'<span class="wi wi-celsius"></span><small>'+d.main+'</small></h2>';
+  });
+  
+  var p = ico.append('div').attr('id', 'info')
+    .selectAll('p').data([
+      {name: 'temp', value: json.main.temp},
+      {name: 'humidity', value: json.main.humidity},
+      {name: 'pressure', value: json.main.pressure}
+    ]);
   
   p.exit().remove();
   
-  p.enter().append('p');
+  p.enter().append('p')
   
   p.html(function(d) {
-    return d.getElementsByTagName('title')[0].childNodes[0].nodeValue + "<br/>" +
-      d.getElementsByTagName('description')[0].childNodes[0].nodeValue;
+    return '<h3>' + d.value + ' <small>'+ d.name +'</small></h3>';
   });
-
+  
 });
