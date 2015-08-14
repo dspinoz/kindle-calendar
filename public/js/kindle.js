@@ -252,5 +252,4 @@ setInterval(function() {
   
   d3.select('#footer').html('<span class="fa fa-refresh"></span> Last refreshed at ' + d3.time.format.iso(new Date()));
   
-}, 100);
-
+}, 60000);
