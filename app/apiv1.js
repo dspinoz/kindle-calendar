@@ -12,7 +12,7 @@ module.exports = function(app) {
   });
   
   app.get(root + '/weather', function(req, res) {
-    req.pipe(request('http://rss.weatherzone.com.au/?u=12994-1285&lt=aploc&lc=12495&obs=1&fc=1&warn=0')).pipe(res);
+    req.pipe(request('http://api.openweathermap.org/data/2.5/weather?q=Adelaide,AU&units=metric')).pipe(res);
   });
   
   app.get(root + '/hello', function(req,res) {
