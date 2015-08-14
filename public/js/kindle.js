@@ -254,3 +254,39 @@ function updateDate() {
 
 updateDate();
 setInterval(updateDate, 60000);
+
+
+d3.xml('/api/v1/weather', "application/xml", function(err, xml) {
+
+  console.log(err,xml);
+  var rss = xml.getElementsByTagName('rss');
+  var channel = rss[0].getElementsByTagName('channel');
+  var items = channel[0].getElementsByTagName('item');
+
+  var data = [];
+  for(var i = 0; i < items.length; i++) {
+    data.push(items[i]);
+  }
+  
+  var p = d3.select('#weather').selectAll('p')
+    .data(data.filter(function(d) {
+      var str = d.getElementsByTagName('title')[0].childNodes[0].nodeValue;
+      console.log(str);
+      if (str.toLowerCase().indexOf('current weather') == -1 &&
+          str.toLowerCase().indexOf('weather forecast') == -1) {
+        return false;
+      }
+      return true;
+    }));
+  
+  p.exit().remove();
+  
+  p.enter().append('p');
+  
+  p.html(function(d) {
+  console.log(d);
+    return d.getElementsByTagName('title')[0].childNodes[0].nodeValue + "<br/>" +
+      d.getElementsByTagName('description')[0].childNodes[0].nodeValue;
+  });
+
+});
