@@ -238,8 +238,7 @@ var dateLong = new textSvg('#date').mixin({
     return dayNumFormat(d)+' '+monthFormat(d);}
 });
 
-var count = 1;
-setInterval(function() {
+function updateDate() {
   
   var date = new Date();
   
@@ -251,5 +250,7 @@ setInterval(function() {
   chart.data(date);
   
   d3.select('#footer').html('<span class="fa fa-refresh"></span> Last refreshed at ' + d3.time.format.iso(new Date()));
-  
-}, 60000);
+}
+
+updateDate();
+setInterval(updateDate, 60000);
