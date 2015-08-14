@@ -7,8 +7,6 @@ var ymdFormat = d3.time.format('%Y-%m-%d'),
     dayNameFormat = d3.time.format('%A'),
     yearFormat = d3.time.format('%Y');
 
-var today = ymdFormat.parse('2015-01-09');
-
 var chart = new d3Kit.Skeleton('#month-view', {
     margin: {top: 0, right: 0, bottom: 0, left: 0}
   })
@@ -243,11 +241,7 @@ var dateLong = new textSvg('#date').mixin({
 var count = 1;
 setInterval(function() {
   
-  var date = new Date(today.getTime()+((count+=50)*6*60*1000));
-  
-  //d3.select('#date').text(dayNumFormat(date) +' ' +monthFormat(date))
-  //d3.select('#year').text(yearFormat(date))
-  //d3.select('#day').text(dayNameFormat(date));
+  var date = new Date();
   
   time.data(date);
   year.data(date);
