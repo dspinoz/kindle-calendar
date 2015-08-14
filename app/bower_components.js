@@ -53,6 +53,30 @@ module.exports = function(app) {
   app.get('/fonts/fontawesome-webfont.svg', function(req,res) {
     res.sendfile('bower_components/fontawesome/fonts/fontawesome-webfont.svg');
   });
+  
+  app.get('/weather-icons.css', function(req,res) {
+    res.sendfile('bower_components/weather-icons/css/weather-icons.css');
+  });
+  
+  app.get('/font/weathericons-regular-webfont.woff', function(req,res) {
+    res.sendfile('bower_components/weather-icons/font/weathericons-regular-webfont.woff');
+  });
+  
+  app.get('/font/weathericons-regular-webfont.woff2', function(req,res) {
+    res.sendfile('bower_components/weather-icons/font/weathericons-regular-webfont.woff2');
+  });
+  
+  app.get('/font/weathericons-regular-webfont.eot', function(req,res) {
+    res.sendfile('bower_components/weather-icons/font/weathericons-regular-webfont.eot');
+  });
+  
+  app.get('/font/weathericons-regular-webfont.svg', function(req,res) {
+    res.sendfile('bower_components/weather-icons/font/weathericons-regular-webfont.svg');
+  });
+  
+  app.get('/font/weathericons-regular-webfont.ttf', function(req,res) {
+    res.sendfile('bower_components/weather-icons/font/weathericons-regular-webfont.ttf');
+  });
 
   app.get('/d3.js', function(req, res) {
     res.sendfile('bower_components/d3/d3.js');

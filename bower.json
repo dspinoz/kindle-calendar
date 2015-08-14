@@ -22,6 +22,7 @@
     "d3": "~3.4.13",
     "bootstrap": "~3.3.5",
     "d3kit": "~1.0.6",
-    "fontawesome": "~4.3.0"
+    "fontawesome": "~4.3.0",
+    "weather-icons": "~2.0.0"
   }
 }
