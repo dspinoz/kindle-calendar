@@ -152,11 +152,6 @@ var textSvg = d3Kit.factory.createChart(
     var redraw = function() {
       var data = skel.data();
       
-      if (Object.prototype.toString.call( data ) !== '[object Date]') {
-        // not a date - chart size (from resize)
-        return;
-      }
-      
       if (!skel.hasData()) {
         return;
       }
