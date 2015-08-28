@@ -4,7 +4,8 @@ var timeFormat = d3.time.format('%-I:%M %p'),
     monthFormat = d3.time.format('%B'),
     dayNumFormat = d3.time.format('%e'),
     dayNameFormat = d3.time.format('%A'),
-    yearFormat = d3.time.format('%Y');
+    yearFormat = d3.time.format('%Y'),
+    sunTimeFormat = d3.time.format('%c');
 
 var calendarChart = d3Kit.factory.createChart(
   {
@@ -260,6 +261,78 @@ function updateDate() {
 updateDate();
 setInterval(updateDate, 60000);
 
+function openWeatherMap_WI(owm_icon_name) {
+
+  //http://openweathermap.org/weather-conditions
+  var wi = '';
+  
+  var type = +owm_icon_name.slice(0,2);
+  var time = '';
+  
+  if (owm_icon_name.slice(2,3) == 'd') {
+    time = 'day';
+  }
+  else if (owm_icon_name.slice(2,3) == 'n') {
+    time = 'night-alt';
+  }
+  
+  switch(type) {
+    case 01:
+      if (time == 'day') {
+        wi = 'sunny';
+      } else {
+        time = 'night';
+        wi = 'clear';
+      }
+      break;
+    case 02:
+      wi = 'cloudy';
+      break;
+    case 03:
+    case 04:
+      wi = 'cloudy';
+      time = '';
+      break;
+    case 09:
+      wi = 'showers';
+      break;
+    case 10:
+      wi = 'rain';
+      break;
+    case 11:
+      wi = 'thunderstorm';
+      break;
+    case 13:
+      wi = 'snow';
+      break;
+    case 50:
+      wi = 'fog';
+      break;
+    default:
+      wi = 'alien';
+  }
+  
+  return 'wi'+(time.length > 0 ? '-'+time : '')+'-'+wi;
+}
+
+
+d3.json('/api/v1/forecast', function(err, json) {
+  console.log('forecast', err,json);
+  
+  var p = d3.select('#forecast').selectAll('p').data(json.list);
+  
+  p.exit().remove();
+  
+  p.enter()
+    .append('p');
+  
+  p.html(function(d) {
+    var wi = openWeatherMap_WI(d.weather[0].icon);
+    wi = '<span class="wi '+wi+'" title="'+d.weather[0].icon+'"></span>';
+    return d.dt_txt + " - " + sunTimeFormat(new Date(d.dt * 1000)) + " - " + wi + " - " + d.main.temp + '<span class="wi wi-celsius"></span>';
+  });
+  
+});
 
 d3.json('/api/v1/weather', function(err, json) {
 
@@ -274,61 +347,18 @@ d3.json('/api/v1/weather', function(err, json) {
   ico.enter().append('div')
   
   ico.html(function(d) {
-    //http://openweathermap.org/weather-conditions
-    var wi = '';
+    var wi = openWeatherMap_WI(d.icon);
     
-    var type = +d.icon.slice(0,2);
-    var time = '';
-    
-    if (d.icon.slice(2,3) == 'd') {
-      time = 'day';
-    }
-    else if (d.icon.slice(2,3) == 'n') {
-      time = 'night';
-    }
-    
-    switch(type) {
-      case 01:
-        if (time == 'day')
-          wi = 'sunny';
-        else
-          wi = 'clear';
-        break;
-      case 02:
-        wi = 'cloudy';
-        break;
-      case 03:
-      case 04:
-        wi = 'cloudy';
-        time = '';
-        break;
-      case 09:
-        wi = 'showers';
-        break;
-      case 10:
-        wi = 'rain';
-        break;
-      case 11:
-        wi = 'thunderstorm';
-        break;
-      case 13:
-        wi = 'snow';
-        break;
-      case 50:
-        wi = 'fog';
-        break;
-      default:
-        wi = 'alien';
-    }
-    
-    return '<h2><span class="wi wi'+(time.length > 0 ? '-'+time : '')+'-'+wi+'"></span>'+ json.main.temp +'<span class="wi wi-celsius"></span><small>'+d.main+'</small></h2>';
+    return '<h2><span class="wi '+wi+ '"></span>'+ json.main.temp +'<span class="wi wi-celsius"></span><small>'+d.main+'</small></h2>';
   });
   
   var p = ico.append('div').attr('id', 'info')
     .selectAll('p').data([
       {name: 'temp', value: json.main.temp},
-      {name: 'humidity', value: json.main.humidity},
-      {name: 'pressure', value: json.main.pressure}
+      {name: 'humidity', value: json.main.humidity, ico:true},
+      {name: 'pressure', value: json.main.pressure},
+      {name: 'sunrise', value: sunTimeFormat(new Date(json.sys.sunrise*1000)), ico:true},
+      {name: 'sunset', value: sunTimeFormat(new Date(json.sys.sunset*1000)), ico:true}
     ]);
   
   p.exit().remove();
@@ -336,6 +366,10 @@ d3.json('/api/v1/weather', function(err, json) {
   p.enter().append('p')
   
   p.html(function(d) {
+    if (d.ico) {
+      return '<h3>' + d.value + ' <span class="wi wi-'+ d.name +'"></span></h3>';
+    }
+  
     return '<h3>' + d.value + ' <small>'+ d.name +'</small></h3>';
   });
   

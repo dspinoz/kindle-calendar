@@ -11,9 +11,24 @@ module.exports = function(app) {
     res.send(JSON.stringify({time: new Date().getTime() }));
   });
   
+  
+  app.get(root + '/forecast', function(req, res) {
+    req.pipe(request('http://api.openweathermap.org/data/2.5/forecast?q=Adelaide,AU&mode=json&units=metric')).pipe(res);
+  });
+  /*
+  app.get(root + '/forecast', function(req, res) {
+    res.sendfile('public/json/adelaide_forecast.json');
+  });
+  */
+  
   app.get(root + '/weather', function(req, res) {
     req.pipe(request('http://api.openweathermap.org/data/2.5/weather?q=Adelaide,AU&units=metric')).pipe(res);
   });
+  /*
+  app.get(root + '/weather', function(req, res) {
+    res.sendfile('public/json/adelaide.json');
+  });
+  */
   
   app.get(root + '/hello', function(req,res) {
     res.send('HELLO WORLD');
