@@ -4,6 +4,7 @@ var timeFormat = d3.time.format('%-I:%M %p'),
     monthFormat = d3.time.format('%B'),
     dayNumFormat = d3.time.format('%e'),
     dayNameFormat = d3.time.format('%A'),
+    dayNameShortFormat = d3.time.format('%a'),
     yearFormat = d3.time.format('%Y'),
     sunTimeFormat = d3.time.format('%c');
 
@@ -230,10 +231,6 @@ var time = new textSvg('#time').mixin({
   'text': function(d) {return timeFormat(d);}
 });
 
-var year = new textSvg('#year').mixin({
-  'text': function(d) {return yearFormat(d);}
-});
-
 var day = new textSvg('#day').mixin({
   'text': function(d) {return dayNameFormat(d);}
 });
@@ -249,7 +246,6 @@ function updateDate() {
   var date = new Date();
   
   time.data(date);
-  year.data(date);
   day.data(date);
   dateLong.data(date);
   
@@ -319,27 +315,31 @@ function openWeatherMap_WI(owm_icon_name) {
 d3.json('/api/v1/forecast', function(err, json) {
   console.log('forecast', err,json);
   
-  var p = d3.select('#forecast').selectAll('p').data(json.list);
+  var p = d3.select('#forecast').selectAll('span').data(json.list);
   
   p.exit().remove();
   
   p.enter()
-    .append('p');
+    .append('span');
+  
+  p.attr('class', 'col-xs-3').style('padding', '0').style('text-align', 'center');
   
   p.html(function(d) {
-    var wi = openWeatherMap_WI(d.weather[0].icon);
-    wi = '<span class="wi '+wi+'" title="'+d.weather[0].icon+'"></span>';
-    return d.dt_txt + " - " + sunTimeFormat(new Date(d.dt * 1000)) + " - " + wi + " - " + d.main.temp + '<span class="wi wi-celsius"></span>';
+    console.log(d);
+    return '<table class="table-condensed"><tr><td class="h4">'+dayNameShortFormat(new Date(d.dt*1000))+'<br/><small>'+d.weather[0].main+'</small></td></tr><tr><td class="h3"><span class="wi '+openWeatherMap_WI(d.weather[0].icon)+'"></span></td></tr><tr><td class="h5">'+d.temp.max.toFixed(0)+' - '+d.temp.min.toFixed(0)+'</td></tr></table>';
   });
   
 });
 
 d3.json('/api/v1/weather', function(err, json) {
 
+  if (err) {
+    d3.select('#weather').text(err);
+    return;
+  }
+  
   console.log('weather', err,json);
 
-  d3.select('#weather').append('h3').text(json.name);
-  
   var ico = d3.select('#weather').append('div').selectAll('div').data(json.weather);
   
   ico.exit().remove();
@@ -347,11 +347,13 @@ d3.json('/api/v1/weather', function(err, json) {
   ico.enter().append('div')
   
   ico.html(function(d) {
+  console.log(d);
     var wi = openWeatherMap_WI(d.icon);
     
-    return '<h2><span class="wi '+wi+ '"></span>'+ json.main.temp +'<span class="wi wi-celsius"></span><small>'+d.main+'</small></h2>';
+    return '<h2 class="text-capitalize">' +d.description+ ': ' + json.main.temp +'<span class="wi wi-celsius"></span> <span class="wi '+wi+ '"></span></h2>';
   });
   
+  /*
   var p = ico.append('div').attr('id', 'info')
     .selectAll('p').data([
       {name: 'temp', value: json.main.temp},
@@ -372,5 +374,5 @@ d3.json('/api/v1/weather', function(err, json) {
   
     return '<h3>' + d.value + ' <small>'+ d.name +'</small></h3>';
   });
-  
+  */
 });
