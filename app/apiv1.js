@@ -13,7 +13,7 @@ module.exports = function(app) {
   
   
   app.get(root + '/forecast', function(req, res) {
-    req.pipe(request('http://api.openweathermap.org/data/2.5/forecast/daily?q=Adelaide,AU&units=metric&cnt=5')).pipe(res);
+    req.pipe(request('http://api.openweathermap.org/data/2.5/forecast/daily?q=Adelaide,AU&units=metric&cnt=4')).pipe(res);
   });
   /*
   app.get(root + '/forecast', function(req, res) {
