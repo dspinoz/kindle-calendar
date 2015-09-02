@@ -78,6 +78,10 @@ module.exports = function(app) {
     res.sendfile('bower_components/weather-icons/font/weathericons-regular-webfont.ttf');
   });
 
+  app.get('/queue.js', function(req, res) {
+    res.sendfile('bower_components/queue-async/queue.js');
+  });
+
   app.get('/d3.js', function(req, res) {
     res.sendfile('bower_components/d3/d3.js');
   });

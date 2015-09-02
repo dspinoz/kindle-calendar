@@ -311,68 +311,89 @@ function openWeatherMap_WI(owm_icon_name) {
   return 'wi'+(time.length > 0 ? '-'+time : '')+'-'+wi;
 }
 
+function getWeatherData() {
+  var q = queue(1);
+  
+  var getJson = function(path, callback) {
+    d3.json('/api/v1/'+path, function(err,json) {
+      callback(err,{name: path, json: json});
+    });
+  };
+  
+  q.defer(getJson, 'weather')
+    .defer(getJson, 'forecast')
+    .awaitAll(function(err,results) {
+      console.log('queue results', err,results);
+      
+      //combine weather and forecast in order to show concise weather info
+      var data = [];
+      
+      results.filter(function(r) {
+        if (r.name == 'weather') {
+          return true;
+        }
+        return false;
+      }).forEach(function(r) {
+        console.log('w', r);
+        data.push({icon: r.json.weather[0].icon,
+                   title: 'Now',
+                   alt: r.json.weather[0].main,
+                   temp: {
+                     now: r.json.main.temp.toFixed(0),
+                     min: r.json.main.temp_min.toFixed(0),
+                     max: r.json.main.temp_max.toFixed(0)
+                   }
+                 });
+      });
+      
+      results.filter(function(r) {
+        if (r.name == 'forecast') {
+          return true;
+        }
+        return false;
+      }).forEach(function(r) {
+        
+        console.log('f', r);
+        
+        for(var i = 1; i < r.json.list.length; i++) {
+          
+          var d = r.json.list[i];
+          
+          console.log('d', d, data);
+          
+          data.push({icon: d.weather[0].icon,
+                     title: dayNameShortFormat(new Date(d.dt*1000)),
+                     alt: d.weather[0].main,
+                     temp: {
+                       min: d.temp.min.toFixed(0),
+                       max: d.temp.max.toFixed(0)
+                     }
+                    });
+        }
+      });
+      
+      console.log('data', data);
+      
+      
+      var p = d3.select('#forecast').selectAll('div').data(data);
+      
+      p.exit().remove();
+      
+      p.enter()
+        .append('div');
+      
+      p.attr('class', 'col-xs-3').style('padding', '0').style('text-align', 'center');
+      
+      p.html(function(d) {
+        
+        return '<table class="table-condensed">'+
+          '<tr><td class="h4">'+d.title+'<br/><small>'+d.alt+'</small></td></tr>'+
+          '<tr><td class="h3"><span class="wi '+openWeatherMap_WI(d.icon)+'"></span></td></tr>'+
+          '<tr><td class="h5">'+(d.temp.now ? d.temp.now : d.temp.min+' - '+d.temp.max)+'</td></tr>'+
+        '</table>';
+      });
+      
+    });
+}
 
-d3.json('/api/v1/forecast', function(err, json) {
-  console.log('forecast', err,json);
-  
-  var p = d3.select('#forecast').selectAll('span').data(json.list);
-  
-  p.exit().remove();
-  
-  p.enter()
-    .append('span');
-  
-  p.attr('class', 'col-xs-3').style('padding', '0').style('text-align', 'center');
-  
-  p.html(function(d) {
-    console.log(d);
-    return '<table class="table-condensed"><tr><td class="h4">'+dayNameShortFormat(new Date(d.dt*1000))+'<br/><small>'+d.weather[0].main+'</small></td></tr><tr><td class="h3"><span class="wi '+openWeatherMap_WI(d.weather[0].icon)+'"></span></td></tr><tr><td class="h5">'+d.temp.max.toFixed(0)+' - '+d.temp.min.toFixed(0)+'</td></tr></table>';
-  });
-  
-});
-
-d3.json('/api/v1/weather', function(err, json) {
-
-  if (err) {
-    d3.select('#weather').text(err);
-    return;
-  }
-  
-  console.log('weather', err,json);
-
-  var ico = d3.select('#weather').append('div').selectAll('div').data(json.weather);
-  
-  ico.exit().remove();
-  
-  ico.enter().append('div')
-  
-  ico.html(function(d) {
-  console.log(d);
-    var wi = openWeatherMap_WI(d.icon);
-    
-    return '<h2 class="text-capitalize">' +d.description+ ': ' + json.main.temp +'<span class="wi wi-celsius"></span> <span class="wi '+wi+ '"></span></h2>';
-  });
-  
-  /*
-  var p = ico.append('div').attr('id', 'info')
-    .selectAll('p').data([
-      {name: 'temp', value: json.main.temp},
-      {name: 'humidity', value: json.main.humidity, ico:true},
-      {name: 'pressure', value: json.main.pressure},
-      {name: 'sunrise', value: sunTimeFormat(new Date(json.sys.sunrise*1000)), ico:true},
-      {name: 'sunset', value: sunTimeFormat(new Date(json.sys.sunset*1000)), ico:true}
-    ]);
-  
-  p.exit().remove();
-  
-  p.enter().append('p')
-  
-  p.html(function(d) {
-    if (d.ico) {
-      return '<h3>' + d.value + ' <span class="wi wi-'+ d.name +'"></span></h3>';
-    }
-  
-    return '<h3>' + d.value + ' <small>'+ d.name +'</small></h3>';
-  });
-  */
-});
+getWeatherData();

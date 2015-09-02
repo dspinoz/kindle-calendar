@@ -14,6 +14,9 @@ html(lang='en')
     //- Bootstrap core CSS
     link(type='text/css', rel='stylesheet', href='/bootstrap.css')
     
+    //- queue
+    script(type='text/javascript', src='/queue.js')
+    
     //- d3
     script(type='text/javascript', src='/d3.js')
     script(type='text/javascript', src='/d3kit.js')
@@ -34,20 +37,12 @@ html(lang='en')
           #time
         .col-xs-6
           #date
+          #day 
+          
       .row
         .col-xs-6
-          #weather
           #forecast
         .col-xs-6
-          #day 
-      .row
-        .col-xs-6
-          #bbbb
-        .col-xs-6
-          #aa
-      
-      .row
-        .col-xs-12.col-md-8
           #month-view
 
     footer.footer
