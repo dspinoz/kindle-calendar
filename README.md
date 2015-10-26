@@ -13,6 +13,10 @@ npm install -g bower
 bower install
 ```
 
+## Configure
+
+* config/apiv1.js - Set APPID for openweather map
+
 ## Running
 
 To run the web app
