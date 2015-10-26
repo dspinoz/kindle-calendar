@@ -1,5 +1,7 @@
 var request = require('request');
 
+var config = require('../config/apiv1');
+
 var root = '/api/v1';
 
 module.exports = function(app) {
@@ -13,7 +15,7 @@ module.exports = function(app) {
   
   
   app.get(root + '/forecast', function(req, res) {
-    req.pipe(request('http://api.openweathermap.org/data/2.5/forecast/daily?q=Adelaide,AU&units=metric&cnt=4')).pipe(res);
+    req.pipe(request('http://api.openweathermap.org/data/2.5/forecast/daily?q=Adelaide,AU&units=metric&cnt=4&APPID=' + config.openweathermap.APPID)).pipe(res);
   });
   /*
   app.get(root + '/forecast', function(req, res) {
@@ -22,7 +24,7 @@ module.exports = function(app) {
   */
   
   app.get(root + '/weather', function(req, res) {
-    req.pipe(request('http://api.openweathermap.org/data/2.5/weather?q=Adelaide,AU&units=metric')).pipe(res);
+    req.pipe(request('http://api.openweathermap.org/data/2.5/weather?q=Adelaide,AU&units=metric&APPID=' + config.openweathermap.APPID)).pipe(res);
   });
   /*
   app.get(root + '/weather', function(req, res) {
