@@ -15,11 +15,11 @@ module.exports = function(app) {
   
   
   app.get(root + '/forecast', function(req, res) {
-    req.pipe(request('http://api.openweathermap.org/data/2.5/forecast/daily?q=Adelaide,AU&units=metric&cnt=4&APPID=' + config.openweathermap.APPID)).pipe(res);
+    req.pipe(request('http://api.openweathermap.org/data/2.5/forecast/daily?q=Adelaide,AU&units=metric&cnt=5&APPID=' + config.openweathermap.APPID)).pipe(res);
   });
   /*
   app.get(root + '/forecast', function(req, res) {
-    res.sendfile('public/json/adelaide_forecast.json');
+    res.sendfile('public/json/forecast_adelaide.json');
   });
   */
   
@@ -28,7 +28,7 @@ module.exports = function(app) {
   });
   /*
   app.get(root + '/weather', function(req, res) {
-    res.sendfile('public/json/adelaide.json');
+    res.sendfile('public/json/weather_adelaide.json');
   });
   */
   app.get(root + '/hello', function(req,res) {

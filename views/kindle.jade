@@ -4,7 +4,7 @@ html(lang='en')
     meta(charset="utf-8")
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1")
-    //- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags 
+    
     meta(name="description" content="")
     meta(name="author" content="")
     link(rel="icon" href="../../favicon.ico")
@@ -24,29 +24,61 @@ html(lang='en')
     //- fonts/icons
     link(type='text/css', rel='stylesheet', href='/font-awesome.css')
     link(type='text/css', rel='stylesheet', href='/weather-icons.css')
-
+    
+    //- my helpers
+    script(type='text/javascript', src='/js/textSvg.js')
+    script(type='text/javascript', src='/js/calendarSvg.js')
+    script(type='text/javascript', src='/js/openweathermap.js')
+    
     //- my style
     link(type='text/css', rel='stylesheet', href='/css/kindle.css')
+    
+    style.
+    
+      /* month-view */
+      circle.cal.in-month {
+        fill: #fff;
+      }
+
+      circle.cal.current {
+        fill: #000;
+      }
+
+      circle.cal {
+        fill: #fff;
+      }
+
+      text.cal.in-month {
+        fill: #000;
+      }
+      text.cal.current {
+        fill: #fff;
+      }
+
+      text.cal {
+        fill: #ccc;
+      }
+
       
   body
 
-    //- Begin page content
     .container-fluid
       .row
-        .col-xs-6
-          #time
-        .col-xs-6
-          #date
-          #day 
-          
+        .col-xs-4
+        .col-xs-8
+          h1#date(style='text-align:center')
+                  
       .row
-        .col-xs-6
-          #forecast
-        .col-xs-6
+        .col-xs-4 
+          
+          #weather-now
+          #weather-forecast
+            
+        .col-xs-8
           #month-view
 
-    footer.footer
-      .container
-        p.text-muted#footer
-        
+
+
     script(type='text/javascript', src='/js/kindle.js')
+
+        

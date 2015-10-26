@@ -29,12 +29,4 @@ module.exports = function(app) {
 	res.render('kindle2', req);
   });
   
-  app.get('/test', function(req,res) {
-	res.render('test', req);
-  });
-  
-  app.get('/d3kit-eg1', function(req,res) {
-	res.render('d3kit-eg1', req);
-  });
-  
 };

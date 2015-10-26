@@ -1,55 +1,28 @@
-
-html {
-  position: relative;
-  min-height: 100%;
+.weather-h4 {
+  padding-bottom: 30px;
+  text-align: center;
 }
 
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 30px;
-  
-  /* some space for kindle */
-  margin-top: 10px;
+.weather-h4 h4
+{
+  font-size: 300%;
+  text-align: center;
+  padding: 0;
+  margin: 0;
 }
 
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 30px;
-  background-color: #f5f5f5;
+.weather-h4 h4 span.wi {
+  font-size: 200%;
 }
 
-.container {
-  width: auto;
-  max-width: 680px;
-  padding: 0 15px;
-}
-.container .text-muted {
-  margin: 5px 0;
+.weather-h6 {
+  display: inline-block;
+  margin: 2px;
+  text-align: center;
 }
 
-/* month-view */
-circle.cal.in-month {
-  fill: #fff;
-}
-
-circle.cal.current {
-  fill: #000;
-}
-
-circle.cal {
-  fill: #fff;
-}
-
-text.cal.in-month {
-  fill: #000;
-}
-text.cal.current {
-  fill: #fff;
-}
-
-text.cal {
-  fill: #ccc;
+.weather-h6 h6 {
+  font-size: 130%;
+  padding: 0;
+  margin: 0;
 }
