@@ -15,6 +15,16 @@
   font-size: 200%;
 }
 
+.weather-h4 h4.extra {
+  font-size: 100%;
+  color: #777;
+}
+
+.weather-h4 h4.extra span.wi {
+  font-size: 120%;
+  margin: 0 2px 0 2px;
+}
+
 .weather-h6 {
   display: inline-block;
   margin: 2px;
@@ -22,7 +32,11 @@
 }
 
 .weather-h6 h6 {
-  font-size: 130%;
+  font-size: 128%;
   padding: 0;
   margin: 0;
+}
+
+.weather-h6 h6 span.wi {
+  padding-top: 2px;
 }
