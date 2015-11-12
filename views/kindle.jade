@@ -21,6 +21,10 @@ html(lang='en')
     script(type='text/javascript', src='/d3.js')
     script(type='text/javascript', src='/d3kit.js')
     
+    //- moment
+    script(type='text/javascript', src='/moment.js')
+    script(type='text/javascript', src='/moment-timezone.js')
+    
     //- fonts/icons
     link(type='text/css', rel='stylesheet', href='/font-awesome.css')
     link(type='text/css', rel='stylesheet', href='/weather-icons.css')
@@ -58,13 +62,30 @@ html(lang='en')
       text.cal {
         fill: #ccc;
       }
+      
+      .weather-h4 .time {
+        color:#ccc;
+      }
 
+      span.icon-rain,
+      span.icon-shower-rain,
+      span.icon-thunderstorm,
+      span.icon-snow {
+        padding-top: 15px;
+        padding-bottom: 5px;
+      }
+      span.icon-few-clouds,
+      span.icon-clouds,
+      span.icon-mist {
+        padding-top: 15px;
+      }
       
   body
 
     .container-fluid
       .row
         .col-xs-4
+          h1#time(style='text-align:center')
         .col-xs-8
           h1#date(style='text-align:center')
                   
