@@ -1,6 +1,8 @@
 var request = require('request');
+var d3 = require('d3');
 
 var config = require('../config/apiv1');
+var timeFormat = d3.time.format('%I:%M %p');
 
 var root = '/api/v1';
 
@@ -10,7 +12,8 @@ module.exports = function(app) {
   
   app.get(root + '/time', function(req, res) {
     res.set('Content-Type', 'application/json');
-    res.send(JSON.stringify({time: new Date().getTime() }));
+    var d = new Date();
+    res.send(JSON.stringify({epoch: d.getTime(), zone: 'Australia/Adelaide', time: timeFormat(d)}));
   });
   
   
@@ -31,6 +34,7 @@ module.exports = function(app) {
     res.sendfile('public/json/weather_adelaide.json');
   });
   */
+  
   app.get(root + '/hello', function(req,res) {
     res.send('HELLO WORLD');
   });
