@@ -6,34 +6,56 @@ var calendar = new calendarSvg('#month-view');
 
 function update() {
   
-  var date = new Date();
-  
-  calendar.data(date);
-  
-  d3.select('#date').text(function() {
-	 return monthYearFormat(date); 
+  d3.json('/api/v1/time', function(json) {
+    var md = moment(json.epoch).tz(json.zone);
+    
+    var moment_str = md.format('YYYY-MM-DD');
+    var parser = d3.time.format('%Y-%m-%d');
+    var srv_day = parser.parse(moment_str);
+    
+    calendar.data(srv_day);
+    
+    d3.select('#time').text(json.time);
+    d3.select('#date').text(monthYearFormat(srv_day));
   });
-  
   
   d3.json('/api/v1/weather', function(json) {
 
-    var data = { icon: json.weather[0].icon,
+    var data = { time: json.dt,
+                 icon: json.weather[0].icon,
                  title: 'Now',
                  alt: json.weather[0].main,
-                 temp: {
-                   now: json.main.temp.toFixed(0),
-                   min: json.main.temp_min.toFixed(0),
-                   max: json.main.temp_max.toFixed(0)
-                 }
+                 humidity: json.main.humidity,
+                 pressure: json.main.pressure,
+                 temp: json.main.temp.toFixed(0)
                 };
     
     var weather = d3.select('#weather-now');
     
-    weather.html('<div class="weather-h4">' +
-                   '<h4><small>' +data.alt+ '</small></h4>' +
-                   '<h4><span class="wi '+openWeatherMap_WI(data.icon)+ '"></span></h4>' +
-                   '<h4><small>'+data.temp.min+'</small>' +data.temp.now+ '<small>' +data.temp.max+ '</small></h4>' +
-                 '</div>');
+    var icon = {alt:data.alt, icon: data.icon};
+    
+    // shorten the description so it fits in the small space
+    var desc = icon.alt;
+    var c = icon.alt.match(/(.*?) (clouds|rain)$/);
+    if (c != null) {
+	  desc = c[2];
+	  desc = desc.charAt(0).toUpperCase() + desc.slice(1);
+	}
+    
+    var start = '<div class="weather-h4"><span class="time">' + moment(data.time*1000).tz('Australia/Adelaide').format('HH:MM Z') + '</span>'+
+                   '<h4><small>' +desc+ '</small></h4>' +
+                   '<h4><span class="wi '+openWeatherMap_WI(icon.icon)+ ' icon-' + icon.alt.replace(' ','-').toLowerCase() + '"></span></h4>';
+                   
+	var temp = '<h4>' +data.temp+ '</h4>';
+
+	// decide if extra information should be shown - takes up precious screen real-estate!
+	var end = //'<h4 class="extra"><span class="wi wi-barometer"></span>' +data.pressure+ 
+              //  '<span class="wi wi-humidity"></span>' +data.humidity +
+            //'</h4>' +
+          '</div>';
+    
+    
+    weather.html(start + temp + end);
     
   });
 
@@ -46,7 +68,8 @@ function update() {
      
      var d = json.list[i];
      
-     data.push({icon: d.weather[0].icon,
+     data.push({time: d.dt,
+                icon: d.weather[0].icon,
                 title: dayNameShortFormat(new Date(d.dt*1000)),
                 alt: d.weather[0].main,
                 temp: {
@@ -74,7 +97,7 @@ function update() {
       return d.alt;
     });
     
-    div.append('h6').attr('class', function(d) {
+    div.append('h6').append('span').attr('class', function(d) {
       return 'wi ' + openWeatherMap_WI(d.icon);
     });
     
