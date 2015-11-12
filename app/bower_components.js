@@ -89,4 +89,16 @@ module.exports = function(app) {
   app.get('/d3kit.js', function(req, res) {
 	res.sendfile('bower_components/d3kit/dist/d3kit.js');
   });
+  
+  app.get('/moment.js', function(req,res) {
+	 res.sendfile('bower_components/moment/moment.js'); 
+  });
+  
+  app.get('/moment-timezone.js', function(req,res) {
+	 res.sendfile('bower_components/moment-timezone//builds/moment-timezone-with-data.js'); 
+  });
+  
+  app.get('/serverdate.js', function(req,res) {
+	 res.sendfile('bower_components/serverdate/lib/ServerDate.js'); 
+  });
 };
