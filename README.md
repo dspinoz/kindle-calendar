@@ -5,6 +5,8 @@ A calendar view that can be used for kindle.
 
 Implements a web app for viewing on a kindle.
 
+[[https://github.com/dspinoz/kindle-calendar/blob/master/wiki/Screenshot.PNG|alt=screenshot]]
+
 ## Installation
 
 ```bash
